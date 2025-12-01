@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Airflow
+airflow/logs/
+airflow/*.pid
+airflow/airflow.cfg
+airflow/webserver_config.py
+
+# dbt
+dbt_project/target/
+dbt_project/dbt_packages/
+dbt_project/logs/
+
+# Data Lake Local (IMPORTANTE: Não comitar dados reais)
+data/
+
+# Environment Variables
+.env
+
+# IDEs e Sistema
+.vscode/
+.idea/
+.DS_Store

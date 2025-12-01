@@ -1,0 +1,6 @@
+apache-airflow-providers-apache-spark
+pyspark
+dbt-core
+dbt-postgres
+requests
+pandas

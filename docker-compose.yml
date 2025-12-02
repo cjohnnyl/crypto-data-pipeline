@@ -7,11 +7,16 @@ x-common:
   env_file: 
     - .env
   volumes:
+    # --- CÓDIGO (Você edita no VS Code, reflete no Docker) ---
     - ./airflow/dags:/opt/airflow/dags
-    - ./airflow/logs:/opt/airflow/logs
     - ./airflow/plugins:/opt/airflow/plugins
     - ./dbt_project:/opt/airflow/dbt_project
-    - ./data:/opt/airflow/data
+    - ./scripts:/opt/airflow/scripts
+    
+    # --- VOLUMES INTERNOS (O Docker gerencia, sem erro de permissão) ---
+    - airflow_logs:/opt/airflow/logs
+    - airflow_data:/opt/airflow/data
+
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
@@ -74,3 +79,5 @@ services:
 
 volumes:
   postgres-db-volume:
+  airflow_logs:       # Volume interno de Logs
+  airflow_data:       # Volume interno de Dados

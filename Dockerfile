@@ -1,17 +1,22 @@
-FROM apache/airflow:2.7.1
+# USAR PYTHON 3.10 (Padrão ouro de estabilidade para Airflow+Spark)
+FROM apache/airflow:2.9.2-python3.10
 
 USER root
 
-# Instala OpenJDK-11 (Necessário para o PySpark rodar)
+# Instalar OpenJDK-17 (Compatível com Spark atual)
 RUN apt-get update && \
-    apt-get install -y openjdk-11-jdk-headless && \
+    apt-get install -y openjdk-17-jdk-headless && \
     apt-get clean;
 
-# Define a variável JAVA_HOME
-ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
+# Definir JAVA_HOME
+ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk-amd64
 
 USER airflow
 
-# Copia o requirements.txt e instala as dependências
+# Copiar requirements
 COPY requirements.txt /requirements.txt
-RUN pip install --no-cache-dir -r /requirements.txt
+
+# --- A CORREÇÃO ---
+# Agora usamos a constraint correta para Python 3.10
+RUN pip install --no-cache-dir -r /requirements.txt \
+    --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.9.2/constraints-3.10.txt"

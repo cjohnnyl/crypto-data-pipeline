@@ -25,3 +25,6 @@ data/
 .vscode/
 .idea/
 .DS_Store
+
+# Scripts temporários/locais
+docker-wrapper.sh

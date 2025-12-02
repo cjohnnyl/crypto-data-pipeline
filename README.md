@@ -43,3 +43,95 @@ crypto-data-pipeline/
 ├── dbt_project/          # Transformações SQL e Testes
 ├── docker-compose.yml    # Infraestrutura como Código
 └── requirements.txt      # Dependências Python
+---
+
+### 🚀 Como Executar
+
+#### 📋 Pré-requisitos
+
+- Docker Engine 20.10+ (ou Docker Desktop)
+- Docker Compose 2.0+
+- Make (opcional, para automação de comandos)
+- 4GB de RAM disponível para os containers
+
+#### ⚙️ Setup e Execução
+
+**Opção 1: Usando Make (Recomendado)**
+
+```bash
+# Clone o repositório
+git clone <repository-url>
+cd crypto-data-pipeline
+
+# Inicie o ambiente completo
+make up
+
+# Para parar os containers
+make down
+
+# Para limpar volumes e remover tudo
+make clean
+```
+
+**Opção 2: Usando Docker Compose direto**
+
+```bash
+# Clone o repositório
+git clone <repository-url>
+cd crypto-data-pipeline
+
+# Configure o ambiente
+echo "AIRFLOW_UID=50000" > .env
+mkdir -p airflow/logs airflow/plugins airflow/dags data/bronze dbt_project/logs scripts
+
+# Ajuste permissões (Linux/macOS)
+chmod -R 777 airflow data dbt_project scripts
+
+# Inicie os containers
+docker compose up -d --build
+
+# Para parar
+docker compose down
+```
+
+**Windows (PowerShell)**
+
+```powershell
+# Configure o ambiente
+"AIRFLOW_UID=50000" | Out-File -FilePath .env -Encoding ASCII
+New-Item -ItemType Directory -Force -Path airflow/logs, airflow/plugins, airflow/dags, data/bronze, dbt_project/logs, scripts
+
+# Inicie os containers
+docker compose up -d --build
+```
+
+#### 🌐 Acessando o Airflow
+
+Após a inicialização (aguarde ~2 minutos):
+
+- **URL**: http://localhost:8080
+- **Usuário**: `airflow`
+- **Senha**: `airflow`
+
+---
+
+### 🔧 Troubleshooting
+
+**Erro de permissão em logs:**
+```bash
+# Linux/macOS
+chmod -R 777 airflow data dbt_project scripts
+
+# Ou remover logs antigos
+rm -rf airflow/logs/*
+```
+
+**Containers não iniciam:**
+```bash
+# Verificar logs
+docker compose logs -f
+
+# Recriar containers
+docker compose down --volumes
+docker compose up -d --build
+```
